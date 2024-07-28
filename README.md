@@ -1,5 +1,20 @@
 # Course Recommendation System
 
+<p align="center">
+    <img src="https://img.shields.io/github/contributors/saboye/Course-Recommendation-System?color=blue&logo=github&style=for-the-badge" alt="GitHub contributors" />
+    <img src="https://img.shields.io/github/forks/saboye/Course-Recommendation-System?logo=github&style=for-the-badge" alt="GitHub forks" />
+    <img src="https://img.shields.io/github/issues-raw/saboye/Course-Recommendation-System?style=for-the-badge" alt="GitHub issues" />
+    <img src="https://img.shields.io/github/license/saboye/Course-Recommendation-System?style=for-the-badge" alt="GitHub license" />
+    <img src="https://img.shields.io/github/last-commit/saboye/Course-Recommendation-System?style=for-the-badge" alt="GitHub last commit" />
+    <img src="https://img.shields.io/badge/flask-2.1.2-blue?style=for-the-badge&logo=flask" alt="Flask" />
+    <img src="https://img.shields.io/badge/scikit--learn-0.24.2-blue?style=for-the-badge&logo=scikit-learn" alt="scikit-learn" />
+    <img src="https://img.shields.io/badge/pandas-1.3.5-blue?style=for-the-badge&logo=pandas" alt="Pandas" />
+    <img src="https://img.shields.io/badge/numpy-1.20.3-blue?style=for-the-badge&logo=numpy" alt="NumPy" />
+
+</p>
+
+
+
 This Python Flask application is designed to provide personalized course recommendations based on course descriptions. The application leverages a content-based filtering approach using TF-IDF Vectorization and Cosine Similarity to identify and recommend courses similar to a keyword entered by the user.
 
 ## Prerequisites
