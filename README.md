@@ -1,4 +1,6 @@
-# Course Recommendation System
+<div align="center">
+  <h1>Course Recommendation System</h1>
+</div>
 
 <p align="center">
     <img src="https://img.shields.io/github/contributors/saboye/Course-Recommendation-System?color=blue&logo=github&style=for-the-badge" alt="GitHub contributors" />
