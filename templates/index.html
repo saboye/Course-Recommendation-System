@@ -6,55 +6,51 @@
     <title>Course Recommendation System</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
     />
   </head>
   <body>
     <div class="container">
       <h1>Course Recommendation System</h1>
       <form id="recommendation-form">
-        <input
-          type="text"
-          id="keyword"
-          name="keyword"
-          placeholder="Enter a keyword"
-        />
-        <button type="submit">Get Recommendations</button>
+        <div class="form-group">
+          <label for="keyword">Enter a course keyword:</label>
+          <input
+            type="text"
+            id="keyword"
+            class="form-control"
+            placeholder="Enter keyword"
+          />
+        </div>
+        <div class="form-group">
+          <label for="course-title">Select a course:</label>
+          <select id="course-title" class="form-control">
+            <option value="">Select a course</option>
+          </select>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary">
+            Get Recommendations
+          </button>
+          <button type="button" id="clear-button" class="btn btn-secondary">
+            Clear
+          </button>
+        </div>
       </form>
-      <div id="recommendations"></div>
+      <div id="recommendations-section" class="mt-5" style="display: none">
+        <h2>The Top 5 Recommendations</h2>
+        <ul id="recommendations" class="list-group"></ul>
+      </div>
     </div>
-    <script>
-      document
-        .getElementById("recommendation-form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          const keyword = document.getElementById("keyword").value;
-          fetch(`/recommend?keyword=${keyword}`)
-            .then((response) => response.json())
-            .then((data) => {
-              const recommendationsDiv =
-                document.getElementById("recommendations");
-              recommendationsDiv.innerHTML = "";
-              if (data.error) {
-                recommendationsDiv.innerHTML = `<p>${data.error}</p>`;
-              } else {
-                const ul = document.createElement("ul");
-                data.recommendations.forEach((course) => {
-                  const li = document.createElement("li");
-                  li.innerHTML = `
-                                <h2>${course.title}</h2>
-                                <p><strong>University:</strong> ${course.university}</p>
-                                <p><strong>Rating:</strong> ${course.rating}</p>
-                                <p><strong>Description:</strong> ${course.description}</p>
-                                <p><strong>Skills:</strong> ${course.skills}</p>
-                                <p><a href="${course.url}" target="_blank">Course URL</a></p>
-                            `;
-                  ul.appendChild(li);
-                });
-                recommendationsDiv.appendChild(ul);
-              }
-            });
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>
 </html>
