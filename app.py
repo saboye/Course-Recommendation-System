@@ -1,3 +1,11 @@
+"""
+Author: Samuel Aboye
+Date: 2024-08-10
+Last Modified: YYYY-MM-DD
+Description: A Flask web application for a Course Recommendation System, 
+designed to help users discover courses tailored to their preferences and educational needs.
+"""
+
 from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import numpy as np

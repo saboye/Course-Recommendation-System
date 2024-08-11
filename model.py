@@ -1,3 +1,14 @@
+"""
+Author: Samuel Aboye
+Date: 2024-08-10
+Last Modified: YYYY-MM-DD
+Description: This model is part of the Course Recommendation System. It leverages 
+collaborative filtering and content-based filtering techniques to recommend courses 
+to users based on their preferences, past course selections, and user profiles. 
+The model is trained on historical Coursea course data and continuously updated to 
+improve its accuracy and relevance.
+"""
+
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer
