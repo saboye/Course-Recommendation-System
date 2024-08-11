@@ -1,7 +1,7 @@
 """
 Author: Samuel Aboye
 Date: 2024-08-10
-Last Modified: YYYY-MM-DD
+Last Modified: 2024-08-10
 Description: This model is part of the Course Recommendation System. It leverages 
 collaborative filtering and content-based filtering techniques to recommend courses 
 to users based on their preferences, past course selections, and user profiles. 

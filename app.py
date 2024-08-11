@@ -1,7 +1,7 @@
 """
 Author: Samuel Aboye
 Date: 2024-08-10
-Last Modified: YYYY-MM-DD
+Last Modified: 2024-08-10
 Description: A Flask web application for a Course Recommendation System, 
 designed to help users discover courses tailored to their preferences and educational needs.
 """
