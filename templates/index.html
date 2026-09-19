@@ -3,54 +3,256 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Course Recommendation System</title>
+    <title>Course Recommendation System | AI-Powered Learning</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap 5.3 CSS -->
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     />
+    <!-- Bootstrap Icons -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <!-- Custom CSS -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/styles.css') }}"
     />
   </head>
   <body>
-    <div class="container">
-      <h1>Course Recommendation System</h1>
-      <form id="recommendation-form">
-        <div class="form-group">
-          <label for="keyword">Enter a course keyword:</label>
-          <input
-            type="text"
-            id="keyword"
-            class="form-control"
-            placeholder="Enter keyword"
-          />
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary-gradient py-3 shadow-sm">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+          <div class="brand-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+          <span class="brand-title">CourseMatch<span class="brand-accent">AI</span></span>
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge rounded-pill bg-white text-primary fw-semibold px-3 py-2">
+            <i class="bi bi-collection-play-fill me-1"></i> 3,400+ Courses
+          </span>
+          <a
+            href="https://github.com/saboye/Course-Recommendation-System"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-sm btn-outline-light d-none d-md-inline-flex align-items-center gap-1"
+          >
+            <i class="bi bi-github"></i> GitHub
+          </a>
         </div>
-        <div class="form-group">
-          <label for="course-title">Select a course:</label>
-          <select id="course-title" class="form-control">
-            <option value="">Select a course</option>
-          </select>
-        </div>
-        <div class="d-flex justify-content-between">
-          <button type="submit" class="btn btn-primary">
-            Get Recommendations
-          </button>
-          <button type="button" id="clear-button" class="btn btn-secondary">
-            Clear
-          </button>
-        </div>
-      </form>
-      <div id="recommendations-section" class="mt-5" style="display: none">
-        <h2>The Top 5 Recommendations</h2>
-        <ul id="recommendations" class="list-group"></ul>
       </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+      <!-- Hero Section -->
+      <section class="hero-section text-center mb-5">
+        <span class="badge badge-subtle mb-3">
+          <i class="bi bi-stars text-warning me-1"></i> Content-Based Recommendation Engine
+        </span>
+        <h1 class="hero-title">Discover Your Next Learning Adventure</h1>
+        <p class="hero-subtitle text-muted mx-auto">
+          Type a topic keyword, choose a course you like, and get AI-curated recommendations tailored to your goals.
+        </p>
+
+        <!-- Popular Topic Chips -->
+        <div class="popular-topics d-flex flex-wrap justify-content-center align-items-center gap-2 mt-4" data-testid="topic-chips">
+          <span class="text-muted small fw-semibold me-1">Popular Topics:</span>
+          <button type="button" class="topic-chip" data-topic="Python">Python</button>
+          <button type="button" class="topic-chip" data-topic="Data Science">Data Science</button>
+          <button type="button" class="topic-chip" data-topic="Machine Learning">Machine Learning</button>
+          <button type="button" class="topic-chip" data-topic="Web Development">Web Development</button>
+          <button type="button" class="topic-chip" data-topic="Artificial Intelligence">AI</button>
+          <button type="button" class="topic-chip" data-topic="Cloud Computing">Cloud</button>
+        </div>
+      </section>
+
+      <!-- Search & Selection Form Card -->
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+          <div class="card search-card shadow-lg border-0 mb-4">
+            <div class="card-body p-4 p-md-5">
+              <!-- Alert Box -->
+              <div
+                id="alert-banner"
+                class="alert alert-warning alert-dismissible fade show d-none"
+                role="alert"
+                data-testid="alert-banner"
+              >
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span id="alert-message">Please select a course to get recommendations.</span>
+                <button
+                  type="button"
+                  class="btn-close"
+                  id="alert-close-btn"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <form id="recommendation-form" novalidate>
+                <!-- Keyword Input Group -->
+                <div class="mb-4">
+                  <label for="keyword" class="form-label fw-semibold">
+                    <i class="bi bi-search me-1 text-primary"></i> 1. Search Courses by Keyword
+                  </label>
+                  <div class="input-group input-group-lg position-relative">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input
+                      type="text"
+                      id="keyword"
+                      name="keyword"
+                      class="form-control bg-light border-start-0 ps-0"
+                      placeholder="e.g., Python, Deep Learning, Finance..."
+                      autocomplete="off"
+                      data-testid="keyword-input"
+                    />
+                    <span
+                      id="search-spinner"
+                      class="spinner-border spinner-border-sm text-primary position-absolute end-0 top-50 translate-middle-y me-3 d-none"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </span>
+                  </div>
+                  <div class="form-text d-flex justify-content-between align-items-center mt-1">
+                    <span class="text-muted small">Type at least 2 characters to search catalog</span>
+                    <span id="course-count-badge" class="badge bg-secondary-subtle text-secondary small d-none" data-testid="course-count-badge">
+                      0 courses found
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Course Select Dropdown -->
+                <div class="mb-4">
+                  <label for="course-title" class="form-label fw-semibold">
+                    <i class="bi bi-book-half me-1 text-primary"></i> 2. Select Reference Course
+                  </label>
+                  <select
+                    id="course-title"
+                    name="course_title"
+                    class="form-select form-select-lg"
+                    data-testid="course-select"
+                  >
+                    <option value="">-- Enter keyword above first to load matching courses --</option>
+                  </select>
+                </div>
+
+                <!-- Options & Buttons -->
+                <div class="row align-items-center g-3 pt-2">
+                  <div class="col-sm-5 col-md-4">
+                    <label for="num-recs" class="form-label small fw-semibold text-muted mb-1">
+                      Recommendations Count:
+                    </label>
+                    <select id="num-recs" class="form-select form-select-sm">
+                      <option value="3">Top 3 recommendations</option>
+                      <option value="5" selected>Top 5 recommendations</option>
+                      <option value="8">Top 8 recommendations</option>
+                      <option value="10">Top 10 recommendations</option>
+                    </select>
+                  </div>
+
+                  <div class="col-sm-7 col-md-8 d-flex justify-content-sm-end gap-2 mt-sm-auto">
+                    <button
+                      type="button"
+                      id="clear-button"
+                      class="btn btn-outline-secondary px-4 py-2"
+                      data-testid="clear-btn"
+                    >
+                      <i class="bi bi-arrow-counterclockwise me-1"></i> Clear
+                    </button>
+                    <button
+                      type="submit"
+                      id="submit-btn"
+                      class="btn btn-primary btn-gradient px-4 py-2 fw-semibold"
+                      data-testid="submit-btn"
+                    >
+                      <i class="bi bi-stars me-1"></i> Get Recommendations
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Loading State Animation -->
+          <div id="loading-state" class="text-center py-5 d-none" data-testid="loading-state">
+            <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 class="fw-semibold text-dark">Finding Best Matches...</h5>
+            <p class="text-muted small">Analyzing course descriptions using TF-IDF vectors & cosine similarity</p>
+          </div>
+
+          <!-- Empty State (Initial) -->
+          <div id="empty-state" class="card border-0 bg-light p-4 text-center my-4" data-testid="empty-state">
+            <div class="empty-icon mb-3 text-primary">
+              <i class="bi bi-compass fs-1"></i>
+            </div>
+            <h5 class="fw-bold mb-1">Ready to explore?</h5>
+            <p class="text-muted small mb-0 mx-auto" style="max-width: 480px;">
+              Enter a subject you want to learn above or click on one of the popular topics to see intelligent course recommendations.
+            </p>
+          </div>
+
+          <!-- Recommendations Section -->
+          <section id="recommendations-section" class="mt-5 d-none" data-testid="recommendations-section">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+              <div>
+                <h2 class="h3 fw-bold mb-1 d-flex align-items-center gap-2">
+                  <i class="bi bi-lightning-charge-fill text-warning"></i>
+                  Top Recommended Courses
+                </h2>
+                <p id="recommendation-subtitle" class="text-muted small mb-0">
+                  Based on your selected course
+                </p>
+              </div>
+              <span id="results-count-badge" class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">
+                5 Courses
+              </span>
+            </div>
+
+            <!-- Recommendation Cards Grid -->
+            <div id="recommendations-grid" class="row g-4" data-testid="recommendations-grid">
+              <!-- Dynamically Populated by JavaScript -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-white border-top py-4 mt-auto">
+      <div class="container text-center text-muted small">
+        <p class="mb-1">Course Recommendation System &copy; 2026. Powered by Machine Learning & NLP.</p>
+        <p class="mb-0">
+          Dataset sourced from
+          <a
+            href="https://www.kaggle.com/datasets/siddharthm1698/coursera-course-dataset"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-decoration-none text-primary"
+          >
+            Coursera Course Dataset (Kaggle)
+          </a>.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Application Logic Script -->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>
 </html>

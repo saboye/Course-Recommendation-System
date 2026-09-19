@@ -1,0 +1,25 @@
+{
+  "name": "course-recommendation-system",
+  "version": "2.0.0",
+  "description": "Content-based course recommendation system with automated test suites",
+  "main": "app.py",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
+  },
+  "keywords": [
+    "flask",
+    "recommendation-system",
+    "machine-learning",
+    "playwright",
+    "e2e-testing"
+  ],
+  "author": "Samuel Aboye",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}
