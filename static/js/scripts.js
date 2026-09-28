@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
-  // Clear Button Handler
+  // Clear Button Handler (Catalog Search)
   clearBtn.addEventListener('click', () => {
     recForm.reset();
     resetCourseDropdown();

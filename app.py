@@ -83,6 +83,24 @@ university_label_encoder = _assets['university_label_encoder']
 app = Flask(__name__)
 
 
+def _format_recommendations(rec_df):
+    """Ensure consistent title casing, university naming, and clean rating values."""
+    if 'Course Name' in rec_df.columns:
+        rec_df['Course Name'] = rec_df['Course Name'].astype(str).str.title()
+    if 'University' in rec_df.columns:
+        if rec_df['University'].dtype != object or rec_df['University'].isna().any():
+            rec_df['University'] = rec_df['University'].fillna('Coursera Partner').astype(str)
+        rec_df['University'] = rec_df['University'].astype(str).str.title()
+    if 'Difficulty Level' in rec_df.columns:
+        rec_df['Difficulty Level'] = rec_df['Difficulty Level'].astype(str).str.title()
+    if 'Course Rating' in rec_df.columns:
+        rec_df['Course Rating'] = pd.to_numeric(rec_df['Course Rating'], errors='coerce').fillna(0.0)
+    if 'Course URL' in rec_df.columns:
+        rec_df['Course URL'] = rec_df['Course URL'].fillna('')
+    if 'Course Description' in rec_df.columns:
+        rec_df['Course Description'] = rec_df['Course Description'].fillna('')
+
+
 def get_content_based_recommendations(course_index, cosine_sim=cosine_sim, df=df, num_recommendations=5):
     """
     Generate content-based recommendations given a course index, incorporating diversity.
@@ -93,10 +111,11 @@ def get_content_based_recommendations(course_index, cosine_sim=cosine_sim, df=df
     :param num_recommendations: Number of recommendations to return (default: 5).
     :return: DataFrame containing recommended courses.
     """
-    if course_index < 0 or course_index >= len(df):
-        empty_cols = ['Course Name', 'University', 'Difficulty Level', 'Course Rating', 'Course URL', 'Course Description']
-        if 'Skills' in df.columns:
-            empty_cols.append('Skills')
+    empty_cols = ['Course Name', 'University', 'Difficulty Level', 'Course Rating', 'Course URL', 'Course Description']
+    if 'Skills' in df.columns:
+        empty_cols.append('Skills')
+
+    if course_index < 0 or course_index >= len(df) or num_recommendations <= 0:
         return pd.DataFrame(columns=empty_cols)
 
     # Compute similarity ranking
@@ -131,26 +150,8 @@ def get_content_based_recommendations(course_index, cosine_sim=cosine_sim, df=df
             if idx not in selected_courses:
                 selected_courses.append(idx)
 
-    cols = ['Course Name', 'University', 'Difficulty Level', 'Course Rating', 'Course URL', 'Course Description']
-    if 'Skills' in df.columns:
-        cols.append('Skills')
-
-    recommendations = df.iloc[selected_courses][cols].copy()
-
-    # Format Course Name as Title Case
-    recommendations['Course Name'] = recommendations['Course Name'].astype(str).str.title()
-
-    # Ensure University is string and formatted nicely
-    if recommendations['University'].dtype != object or recommendations['University'].isna().any():
-        recommendations['University'] = recommendations['University'].fillna('Unknown University').astype(str)
-    recommendations['University'] = recommendations['University'].astype(str).str.title()
-
-    # Ensure Difficulty Level is title cased
-    recommendations['Difficulty Level'] = recommendations['Difficulty Level'].astype(str).str.title()
-
-    # Ensure Course Rating is numeric float or formatted
-    recommendations['Course Rating'] = pd.to_numeric(recommendations['Course Rating'], errors='coerce').fillna(0.0)
-
+    recommendations = df.iloc[selected_courses][empty_cols].copy()
+    _format_recommendations(recommendations)
     return recommendations
 
 
@@ -243,3 +244,4 @@ def get_courses():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
+

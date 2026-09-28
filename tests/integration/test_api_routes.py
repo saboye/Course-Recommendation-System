@@ -133,3 +133,9 @@ class TestApiRoutes:
         """Test requesting nonexistent route returns 404."""
         response = client.get('/nonexistent-path-for-testing')
         assert response.status_code == 404
+
+    def test_predict_image_route_removed(self, client):
+        """Test that removed /predict-image endpoint returns 404."""
+        response = client.post('/predict-image')
+        assert response.status_code == 404
+
